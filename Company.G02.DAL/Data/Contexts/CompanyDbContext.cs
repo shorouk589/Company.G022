@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Company.G02.DAL.Data.Contexts
 {
-    internal class CompanyDbContext : DbContext
+    public class CompanyDbContext : DbContext
     {
         public CompanyDbContext() : base()
         {
@@ -26,6 +26,6 @@ namespace Company.G02.DAL.Data.Contexts
         }
 
 
-        DbSet<Department> Departments { get; set; }
+       public DbSet<Department> Departments { get; set; }
     }
 }
