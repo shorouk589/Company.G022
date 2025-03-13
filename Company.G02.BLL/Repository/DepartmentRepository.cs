@@ -11,7 +11,7 @@ namespace Company.G02.BLL.Repository
 {
     internal class DepartmentRepository : IDepartmentRepository
     {
-        private CompanyDbContext _context;
+        private readonly CompanyDbContext _context;
         public DepartmentRepository()
         {
             _context = new CompanyDbContext();
