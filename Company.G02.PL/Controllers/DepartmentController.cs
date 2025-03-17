@@ -92,21 +92,54 @@ namespace Company.G02.PL.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit(Department department)
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit([FromRoute] int id, Department department)
         {
 
             if (ModelState.IsValid)
             {
-                var count = _departmentRepository.Update(department);
-                if (count > 0)
+                if (id == department.Id)
                 {
-                    return RedirectToAction(nameof(Index));
+                    var count = _departmentRepository.Update(department);
+                    if (count > 0)
+                    {
+                        return RedirectToAction(nameof(Index));
 
+                    }
                 }
             }
             return View(department);
 
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken] // preferred for any post action
+        //public IActionResult Edit([FromRoute] int id, UpdateDepatmentDto model)
+        //{
+
+        //    if (ModelState.IsValid)
+        //    {
+
+
+        //        var department = new Department()
+        //        {
+        //            Id = id,
+        //            Name = model.Name,
+        //            Code = model.Code,
+        //            CreatedAt = model.CreateAt,
+        //        };
+        //        var count = _departmentRepository.Update(department);
+        //        if (count > 0)
+        //        {
+        //            return RedirectToAction(nameof(Index));
+
+        //        }
+
+        //    }
+        //    return View(model);
+
+        //}
+
 
 
     }
