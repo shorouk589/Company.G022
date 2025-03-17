@@ -71,7 +71,42 @@ namespace Company.G02.PL.Controllers
             }
             return View(department);
         }
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id is null)
+            {
+                return BadRequest("IS INVALID MESSAGE");//400
 
+            }
+            var department = _departmentRepository.Get(id.Value);
+            if (department == null)
+            {
+                return NotFound(new { StatusCode = 404, Message = $"Department with {id} is not valid" });
+
+
+            }
+            return View(department);
+
+        }
+
+
+        [HttpPost]
+        public IActionResult Edit(Department department)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var count = _departmentRepository.Update(department);
+                if (count > 0)
+                {
+                    return RedirectToAction(nameof(Index));
+
+                }
+            }
+            return View(department);
+
+        }
 
 
     }

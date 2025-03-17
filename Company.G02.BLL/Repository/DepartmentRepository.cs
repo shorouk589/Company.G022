@@ -40,7 +40,7 @@ namespace Company.G02.BLL.Repository
         public int Delete(Department model)
         {
 
-            _context.Departments.Update(model);
+            _context.Departments.Remove(model);
             return _context.SaveChanges();
         }
 
@@ -49,7 +49,7 @@ namespace Company.G02.BLL.Repository
         public int Update(Department model)
         {
 
-            _context.Departments.Remove(model);
+            _context.Departments.Update(model);
             return _context.SaveChanges();
         }
     }
