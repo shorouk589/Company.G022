@@ -71,6 +71,74 @@ namespace Company.G02.PL.Controllers
             }
             return View(department);
         }
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id is null)
+            {
+                return BadRequest("IS INVALID MESSAGE");//400
+
+            }
+            var department = _departmentRepository.Get(id.Value);
+            if (department == null)
+            {
+                return NotFound(new { StatusCode = 404, Message = $"Department with {id} is not valid" });
+
+
+            }
+            return View(department);
+
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit([FromRoute] int id, Department department)
+        {
+
+            if (ModelState.IsValid)
+            {
+                if (id == department.Id)
+                {
+                    var count = _departmentRepository.Update(department);
+                    if (count > 0)
+                    {
+                        return RedirectToAction(nameof(Index));
+
+                    }
+                }
+            }
+            return View(department);
+
+        }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken] // preferred for any post action
+        //public IActionResult Edit([FromRoute] int id, UpdateDepatmentDto model)
+        //{
+
+        //    if (ModelState.IsValid)
+        //    {
+
+
+        //        var department = new Department()
+        //        {
+        //            Id = id,
+        //            Name = model.Name,
+        //            Code = model.Code,
+        //            CreatedAt = model.CreateAt,
+        //        };
+        //        var count = _departmentRepository.Update(department);
+        //        if (count > 0)
+        //        {
+        //            return RedirectToAction(nameof(Index));
+
+        //        }
+
+        //    }
+        //    return View(model);
+
+        //}
 
 
 
