@@ -14,11 +14,15 @@ namespace Company.G02.BLL.Repository
         private CompanyDbContext Context { get; }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< Updated upstream
         public EmployeeRepository(CompanyDbContext context)
 =======
         public EmployeeRepository(CompanyDbContext context) : base(context)//ASK CLR Create Object From CompanyDbContext    
 >>>>>>> Stashed changes
+=======
+        public EmployeeRepository(CompanyDbContext context)
+>>>>>>> 9dcd77fcc30c7140568edbaa33281339ddfaf8bf
 =======
         public EmployeeRepository(CompanyDbContext context)
 >>>>>>> 9dcd77fcc30c7140568edbaa33281339ddfaf8bf
