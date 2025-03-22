@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Company.G02.BLL.Repository
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+    public class GenericRepository<T> :IGenericRepository<T> where T : BaseEntity
     {
         private CompanyDbContext Context { get; }
 
