@@ -12,6 +12,7 @@ namespace Company.G02.BLL.Interfaces
     public interface IEmployeeRepository
 
     {
+
         public IEnumerable<Employee> GetALL();
 
         Employee? Get(int id);
