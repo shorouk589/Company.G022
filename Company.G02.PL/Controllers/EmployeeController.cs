@@ -14,11 +14,13 @@ namespace Company.G02.PL.Controllers
         {
             _EmployeeRepository = employeeRepository;
         }
+
+
         [HttpGet]
         public IActionResult Index()
         {
-            var employee = _EmployeeRepository.GetALL();
-            return View(employee);
+            var employees = _EmployeeRepository.GetALL();
+            return View(employees);
         }
 
         [HttpGet]
@@ -29,7 +31,7 @@ namespace Company.G02.PL.Controllers
         [HttpPost]
         public IActionResult Create(CreateEmployeeDto model)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) //Server Side Vaidation
             {
                 var employee = new Employee()
                 {
