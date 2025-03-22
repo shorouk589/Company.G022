@@ -11,7 +11,7 @@ namespace Company.G02.BLL.Repository
 {
     public class DepartmentRepository : GenericRepository<Department>, IDepartmentRepository
     {
-        //private readonly CompanyDbContext _context;
+        private readonly CompanyDbContext _context;
 
         //// Ask CLR Create Object From CompanyDbContext
         //public DepartmentRepository(CompanyDbContext Context)
@@ -63,5 +63,7 @@ namespace Company.G02.BLL.Repository
         {
 
         }
+
+       
     }
 }
