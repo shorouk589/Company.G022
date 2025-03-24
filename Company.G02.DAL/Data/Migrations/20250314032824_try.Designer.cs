@@ -36,7 +36,7 @@ namespace Company.G02.DAL.Data.Migrations
                     b.Property<int>("Code")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("Createdat")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")

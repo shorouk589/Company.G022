@@ -39,7 +39,7 @@ namespace Company.G02.PL.Controllers
                 {
                     Code = model.Code,
                     Name = model.Name,
-                    CreatedAt = model.CreateAt
+                    CreatedAt = model.CreatedAt
 
                 };
                 var count = _departmentRepository.Add(department);
@@ -50,7 +50,7 @@ namespace Company.G02.PL.Controllers
             }
 
 
-            return View();
+            return View(model);
 
 
         }
@@ -74,35 +74,46 @@ namespace Company.G02.PL.Controllers
         [HttpGet]
         public IActionResult Edit(int? id)
         {
-            //    if (id is null)
-            //    {
-            //        return BadRequest("IS INVALID MESSAGE");//400
+            if (id is null) return BadRequest("IS INVALID MESSAGE");//400
 
-            //    }
-            //    var department = _departmentRepository.Get(id.Value);
-            //    if (department == null)
-            //    {
-            //        return NotFound(new { StatusCode = 404, Message = $"Department with {id} is not valid" });
+            var department = _departmentRepository.Get(id.Value);
+            if (department == null) return NotFound(new { StatusCode = 404, Message = $"Department with {id} is not valid" });
+
+            var DepartmentDto = new CreateDepartmentDto()
+            {
+
+                Code = department.Code,
+                Name = department.Name,
+                CreatedAt = department.CreatedAt
+
+            };
 
 
-            //    }
-            //    return View(department);
+            //return View(department);
 
-            return Details(id, "Edit");
+            return View(DepartmentDto);
 
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, Department department)
+        public IActionResult Edit([FromRoute] int id, CreateDepartmentDto model)
         {
-
             if (ModelState.IsValid)
-            {
-                if (id == department.Id)
+            {// if (id == model.) return BadRequest();
+
+                var Department = new Department()
                 {
-                    var count = _departmentRepository.Update(department);
+                    Id = id,
+                    Code = model.Code,
+                    Name = model.Name,
+                    CreatedAt = model.CreatedAt
+
+                };
+
+                {
+                    var count = _departmentRepository.Update(Department);
                     if (count > 0)
                     {
                         return RedirectToAction(nameof(Index));
@@ -110,7 +121,7 @@ namespace Company.G02.PL.Controllers
                     }
                 }
             }
-            return View(department);
+            return View(model);
 
         }
 

@@ -47,16 +47,7 @@
                     <td>@item.IsDeleted</td>
                     <td>@item.DateOfBirth</td>
                     <td>@item.CreateAt</td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-warning mx-lg-1">Details</a>
-                    </td>
-
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success mx-lg-1">Update</a>
-                    </td>
-                    <td>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger mx-lg-1">Delete</a>
-                    </td>
+                    <partial name="_IndexPartialView" model="@item.Id" />
                 </tr>
             }
         </tbody>
