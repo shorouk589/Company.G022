@@ -27,6 +27,7 @@
                 <th>Is Deleted</th>
                 <th>@Html.DisplayNameFor(E => E.DateOfBirth)</th>
                 <th>@Html.DisplayNameFor(E => E.CreateAt)</th>
+                <th>DepartmentName</th>
                 <th> Details</th>
                 <th>Update</th>
                 <th>Delete</th>
@@ -47,6 +48,7 @@
                     <td>@item.IsDeleted</td>
                     <td>@item.DateOfBirth</td>
                     <td>@item.CreateAt</td>
+                    <td>@item.Department?.Name??"N/A"</td>
                     <partial name="_IndexPartialView" model="@item.Id" />
                 </tr>
             }

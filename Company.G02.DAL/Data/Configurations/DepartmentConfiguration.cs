@@ -14,6 +14,8 @@ namespace Company.G02.DAL.Data.Configurations
         public void Configure(EntityTypeBuilder<Department> builder)
         {
             builder.Property(d => d.Id).UseIdentityColumn(10, 10);
+
+         
         }
     }
 }
