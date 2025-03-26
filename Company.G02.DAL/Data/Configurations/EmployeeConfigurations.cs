@@ -14,6 +14,13 @@ namespace Company.G02.DAL.Data.Configurations
         public void Configure(EntityTypeBuilder<Employee> builder)
         {
             builder.Property(d => d.Salary).HasColumnName("Salary").HasColumnType("decimal(18,2)");
+
+            //builder.Property(d => d.Name).HasMaxLength(100).IsRequired();   
+
+            builder.HasOne(d => d.Department)
+                .WithMany(e => e.Employees)
+                .HasForeignKey(d => d.DepartmentId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

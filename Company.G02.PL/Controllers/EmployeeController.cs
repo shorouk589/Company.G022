@@ -10,9 +10,12 @@ namespace Company.G02.PL.Controllers
     public class EmployeeController : Controller
     {
         private IEmployeeRepository _EmployeeRepository;//Null
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        private readonly IDepartmentRepository _departmentRepository;
+
+        public EmployeeController(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
         {
             _EmployeeRepository = employeeRepository;
+            _departmentRepository = departmentRepository;
         }
 
 
@@ -26,6 +29,8 @@ namespace Company.G02.PL.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            var department = _departmentRepository.GetALL();
+            ViewData["departments"] = department;
             return View();
         }
         [HttpPost]
@@ -44,7 +49,9 @@ namespace Company.G02.PL.Controllers
                     IsActive = model.IsActive,
                     IsDeleted = model.IsDeleted,
                     DateOfBirth = model.HiringDate,
-                    CreateAt = model.CreateAt
+                    CreateAt = model.CreateAt,
+                    DepartmentId=model.DepartmentId,
+
                 };
                 var count = _EmployeeRepository.Add(employee);
 
@@ -71,35 +78,40 @@ namespace Company.G02.PL.Controllers
         [HttpGet]
         public IActionResult Edit(int? id)
         {
-
+            var department = _departmentRepository.GetALL();
+            ViewData["departments"] = department;
             if (id is null) return BadRequest("IS INVALID MESSAGE");//400
 
             var employee = _EmployeeRepository.Get(id.Value);
+
             if (employee == null) return NotFound(new { StatusCode = 404, Message = $"Department with {id} is not valid" });
 
-            var EmployeeDto = new CreateEmployeeDto()
-            {
+            //var EmployeeDto = new CreateEmployeeDto()
+            //{
 
-                Name = employee.Name,
-                Age = employee.Age,
-                Email = employee.Email,
-                Phone = employee.Phone,
-                Address = employee.Address,
-                Salary = employee.Salary,
-                IsActive = employee.IsActive,
-                IsDeleted = employee.IsDeleted,
-                HiringDate = employee.DateOfBirth,
-                CreateAt = employee.CreateAt
+            //    Name = employee.Name,
+            //    Age = employee.Age,
+            //    Email = employee.Email,
+            //    Phone = employee.Phone,
+            //    Address = employee.Address,
+            //    Salary = employee.Salary,
+            //    IsActive = employee.IsActive,
+            //    IsDeleted = employee.IsDeleted,
+            //    HiringDate = employee.DateOfBirth,
+            //    CreateAt = employee.CreateAt
 
-            };
-
+            //};
+            // return View(EmployeeDto);
 
             //return View(department);
 
-            return View(EmployeeDto);
-
-
             // return Details(id, "Edit");
+
+         
+           
+          
+            
+            return View(employee);
         }
 
         [HttpPost]

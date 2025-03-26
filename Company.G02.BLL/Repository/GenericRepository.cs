@@ -1,6 +1,7 @@
 ﻿using Company.G02.BLL.Interfaces;
 using Company.G02.DAL.Data.Contexts;
 using Company.G02.DAL.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace Company.G02.BLL.Repository
         }
         public IEnumerable<T> GetALL()
         {
+            if (typeof(T) == typeof(Employee)) {return (IEnumerable<T>)Context.Employees.Include(e=>e.Department).ToList(); }
+
             return Context.Set<T>().ToList();
         }
         public T? Get(int id)
