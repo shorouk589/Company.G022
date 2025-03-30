@@ -10,9 +10,12 @@ namespace Company.G02.PL.Controllers
     public class EmployeeController : Controller
     {
         private IEmployeeRepository _EmployeeRepository;//Null
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        private readonly IDepartmentRepository _departmentRepository;
+
+        public EmployeeController(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
         {
             _EmployeeRepository = employeeRepository;
+            _departmentRepository = departmentRepository;
         }
 
 
@@ -26,6 +29,8 @@ namespace Company.G02.PL.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            var department = _departmentRepository.GetALL();
+            ViewData["departments"] = department;
             return View();
         }
         [HttpPost]
@@ -35,6 +40,7 @@ namespace Company.G02.PL.Controllers
             {
                 var employee = new Employee()
                 {
+                 
                     Name = model.Name,
                     Age = model.Age,
                     Email = model.Email,
@@ -44,7 +50,9 @@ namespace Company.G02.PL.Controllers
                     IsActive = model.IsActive,
                     IsDeleted = model.IsDeleted,
                     DateOfBirth = model.HiringDate,
-                    CreateAt = model.CreateAt
+                    CreateAt = model.CreateAt,
+                    DepartmentId = model.DepartmentId,
+
                 };
                 var count = _EmployeeRepository.Add(employee);
 
@@ -61,6 +69,8 @@ namespace Company.G02.PL.Controllers
         public IActionResult Details(int? id, string ViewName = "Details")
         {
             if (id == null) return BadRequest("Invalid Id");//100
+            var departments = _departmentRepository.GetALL();
+            ViewData["departments"] = departments;
 
             var employee = _EmployeeRepository.Get(id.Value);
             if (employee == null) return NotFound("Employee Not Found");//404
@@ -71,10 +81,12 @@ namespace Company.G02.PL.Controllers
         [HttpGet]
         public IActionResult Edit(int? id)
         {
-
+            var department = _departmentRepository.GetALL();
+            ViewData["departments"] = department;
             if (id is null) return BadRequest("IS INVALID MESSAGE");//400
 
             var employee = _EmployeeRepository.Get(id.Value);
+
             if (employee == null) return NotFound(new { StatusCode = 404, Message = $"Department with {id} is not valid" });
 
             var EmployeeDto = new CreateEmployeeDto()
@@ -89,17 +101,21 @@ namespace Company.G02.PL.Controllers
                 IsActive = employee.IsActive,
                 IsDeleted = employee.IsDeleted,
                 HiringDate = employee.DateOfBirth,
-                CreateAt = employee.CreateAt
+                CreateAt = employee.CreateAt,
+                DepartmentId = employee.DepartmentId,
 
             };
-
+            return View(EmployeeDto);
 
             //return View(department);
 
-            return View(EmployeeDto);
-
-
             // return Details(id, "Edit");
+
+
+
+
+
+            //return View(employee);
         }
 
         [HttpPost]
@@ -121,17 +137,26 @@ namespace Company.G02.PL.Controllers
                     IsActive = model.IsActive,
                     IsDeleted = model.IsDeleted,
                     DateOfBirth = model.HiringDate,
-                    CreateAt = model.CreateAt
+                    CreateAt = model.CreateAt,
+                    DepartmentId = model.DepartmentId,
                 };
                 var count = _EmployeeRepository.Update(employee);
                 if (count > 0) return RedirectToAction(nameof(Index));
+
+
             }
+            var departments = _departmentRepository.GetALL();
+            ViewData["departments"] = departments;
+
             return View(model);
         }
 
         [HttpGet]
         public IActionResult Delete(int? id)
         {
+            var departments = _departmentRepository.GetALL();
+            ViewData["departments"] = departments;
+
             return Details(id, "Delete");
         }
 
@@ -139,6 +164,9 @@ namespace Company.G02.PL.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete([FromRoute] int id, Employee model)
         {
+            var departments = _departmentRepository.GetALL();
+            ViewData["departments"] = departments;
+
             if (id != model.Id) return BadRequest("Invalid Id"); //400    
             var count = _EmployeeRepository.Delete(model);
             if (count > 0) { return RedirectToAction(nameof(Index)); }
