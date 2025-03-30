@@ -20,9 +20,20 @@ namespace Company.G02.PL.Controllers
 
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(string? SearchInput)
         {
-            var employees = _EmployeeRepository.GetALL();
+            IEnumerable<Employee> employees;
+            if (string.IsNullOrEmpty(SearchInput))
+            {
+                employees = _EmployeeRepository.GetALL();
+             
+            }
+            else
+            {
+                employees = _EmployeeRepository.GetByName(SearchInput);
+              
+            }
+            //var employees = _EmployeeRepository.GetALL();
             return View(employees);
         }
 
@@ -40,7 +51,7 @@ namespace Company.G02.PL.Controllers
             {
                 var employee = new Employee()
                 {
-                 
+
                     Name = model.Name,
                     Age = model.Age,
                     Email = model.Email,

@@ -7,8 +7,28 @@
 <h1>All Employees</h1>
 <br />
 <br />
-<a asp-action="Create" class="btn btn-primary">Create Employee</a>
 
+
+
+<a asp-action="Create" class="btn btn-primary">Create Employee</a>
+<br />
+<br />
+<form>
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <input placeholder="Search by Name" name="SearchInput" class="form-control" />
+
+            </div>
+            <div class="col-6">
+                <input type="submit" value="Search" class="btn btn-success " />
+
+            </div>
+
+        </div>
+    </div>
+
+</form>
 <br />
 <br />
 
@@ -48,8 +68,8 @@
                     <td>@item.IsDeleted</td>
                     <td>@item.DateOfBirth</td>
                     <td>@item.CreateAt</td>
-                  @*  <td>@item.Department?.Name</td>*@
-                  
+                    @*  <td>@item.Department?.Name</td>*@
+
                     @if (item.Department is null)
                     {
                         <td>No Department</td>
@@ -59,7 +79,7 @@
                         <td>@item.Department.Name</td>
                     }
 
-                  
+
                     <partial name="_IndexPartialView" model="@item.Id" />
                 </tr>
             }
