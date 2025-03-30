@@ -48,7 +48,7 @@ namespace Company.G02.PL.Controllers
         public IActionResult Create(CreateEmployeeDto model)
         {
             if (ModelState.IsValid) //Server Side Validation
-            {
+            {// Manual Mapping
                 var employee = new Employee()
                 {
 
