@@ -2,6 +2,10 @@
 @{
     ViewData["Title"] = "Details";
 }
+@{
+    var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department>, "Id", "Name");
+}
+
 
 <h1>Details Page</h1>
 <br />

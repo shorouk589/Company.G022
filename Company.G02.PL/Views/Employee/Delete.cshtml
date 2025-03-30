@@ -2,6 +2,10 @@
 @{
     ViewData["Title"] = "Delete";
 }
+@{
+    var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department>, "Id", "Name");
+}
+
 
 <h1>Delete Employee</h1>
 

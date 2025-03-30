@@ -1,6 +1,6 @@
 ﻿
 
-@model Employee
+@model CreateEmployeeDto
 @{
     var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department>,"Id" , "Name");
 }
@@ -46,9 +46,9 @@
 
 </div>
 <div class="form-group my-3">
-    <label asp-for="DateOfBirth"></label>
-    <input asp-for="DateOfBirth" class="form-control" />
-    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+    <label asp-for="HiringDate"></label>
+    <input asp-for="HiringDate" class="form-control" />
+    <span asp-validation-for="HiringDate" class="text-danger"></span>
 
 </div>
 <div class="my-3">

@@ -1,5 +1,8 @@
 ﻿@model Employee
 
+@{
+    var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department>, "Id", "Name");
+}
 
 
 
@@ -54,4 +57,11 @@
     <label asp-for="CreateAt" class="col-form-label"></label>
     <input asp-for="CreateAt" class="form-control" readonly />
 
+</div>
+<div class="my-3">
+    <label asp-for="DepartmentId"></label>
+    <select asp-for="DepartmentId" asp-items="Departments" class="form-control">
+
+        <option value="@null">--Select Department--</option>
+    </select>
 </div>

@@ -40,6 +40,7 @@ namespace Company.G02.PL.Controllers
             {
                 var employee = new Employee()
                 {
+                 
                     Name = model.Name,
                     Age = model.Age,
                     Email = model.Email,
@@ -50,7 +51,7 @@ namespace Company.G02.PL.Controllers
                     IsDeleted = model.IsDeleted,
                     DateOfBirth = model.HiringDate,
                     CreateAt = model.CreateAt,
-                    DepartmentId=model.DepartmentId,
+                    DepartmentId = model.DepartmentId,
 
                 };
                 var count = _EmployeeRepository.Add(employee);
@@ -68,6 +69,8 @@ namespace Company.G02.PL.Controllers
         public IActionResult Details(int? id, string ViewName = "Details")
         {
             if (id == null) return BadRequest("Invalid Id");//100
+            var departments = _departmentRepository.GetALL();
+            ViewData["departments"] = departments;
 
             var employee = _EmployeeRepository.Get(id.Value);
             if (employee == null) return NotFound("Employee Not Found");//404
@@ -86,32 +89,33 @@ namespace Company.G02.PL.Controllers
 
             if (employee == null) return NotFound(new { StatusCode = 404, Message = $"Department with {id} is not valid" });
 
-            //var EmployeeDto = new CreateEmployeeDto()
-            //{
+            var EmployeeDto = new CreateEmployeeDto()
+            {
 
-            //    Name = employee.Name,
-            //    Age = employee.Age,
-            //    Email = employee.Email,
-            //    Phone = employee.Phone,
-            //    Address = employee.Address,
-            //    Salary = employee.Salary,
-            //    IsActive = employee.IsActive,
-            //    IsDeleted = employee.IsDeleted,
-            //    HiringDate = employee.DateOfBirth,
-            //    CreateAt = employee.CreateAt
+                Name = employee.Name,
+                Age = employee.Age,
+                Email = employee.Email,
+                Phone = employee.Phone,
+                Address = employee.Address,
+                Salary = employee.Salary,
+                IsActive = employee.IsActive,
+                IsDeleted = employee.IsDeleted,
+                HiringDate = employee.DateOfBirth,
+                CreateAt = employee.CreateAt,
+                DepartmentId = employee.DepartmentId,
 
-            //};
-            // return View(EmployeeDto);
+            };
+            return View(EmployeeDto);
 
             //return View(department);
 
             // return Details(id, "Edit");
 
-         
-           
-          
-            
-            return View(employee);
+
+
+
+
+            //return View(employee);
         }
 
         [HttpPost]
@@ -133,17 +137,26 @@ namespace Company.G02.PL.Controllers
                     IsActive = model.IsActive,
                     IsDeleted = model.IsDeleted,
                     DateOfBirth = model.HiringDate,
-                    CreateAt = model.CreateAt
+                    CreateAt = model.CreateAt,
+                    DepartmentId = model.DepartmentId,
                 };
                 var count = _EmployeeRepository.Update(employee);
                 if (count > 0) return RedirectToAction(nameof(Index));
+
+
             }
+            var departments = _departmentRepository.GetALL();
+            ViewData["departments"] = departments;
+
             return View(model);
         }
 
         [HttpGet]
         public IActionResult Delete(int? id)
         {
+            var departments = _departmentRepository.GetALL();
+            ViewData["departments"] = departments;
+
             return Details(id, "Delete");
         }
 
@@ -151,6 +164,9 @@ namespace Company.G02.PL.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete([FromRoute] int id, Employee model)
         {
+            var departments = _departmentRepository.GetALL();
+            ViewData["departments"] = departments;
+
             if (id != model.Id) return BadRequest("Invalid Id"); //400    
             var count = _EmployeeRepository.Delete(model);
             if (count > 0) { return RedirectToAction(nameof(Index)); }
