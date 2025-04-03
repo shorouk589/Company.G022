@@ -13,12 +13,14 @@ namespace Company.G02.BLL.Interfaces
 
         T? Get(int id);
 
-        int Add(T model);
+        //int Add(T model);
+        void Add(T model);
 
-        int Update(T model);
+        //int Update(T model);
+        void Update(T model);
 
-
-        int Delete(T model);
+        //int Delete(T model);
+        void Delete(T model);
 
     }
 }

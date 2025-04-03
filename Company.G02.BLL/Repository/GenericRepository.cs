@@ -28,22 +28,22 @@ namespace Company.G02.BLL.Repository
         {
             return Context.Set<T>().Find(id);
         }
-        public int Add(T model)
+        public void Add(T model)
         {
             Context.Set<T>().Add(model);
-            return Context.SaveChanges();
+            //return Context.SaveChanges();
         }
 
-        public int Delete(T model)
+        public void Delete(T model)
         {
             Context.Set<T>().Remove(model);
-            return Context.SaveChanges();
+           
         }
 
-        public int Update(T model)
+        public void Update(T model)
         {
             Context.Set<T>().Update(model);
-            return Context.SaveChanges();
+           
         }
     }
 }

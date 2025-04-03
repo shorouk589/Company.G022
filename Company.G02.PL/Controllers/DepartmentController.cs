@@ -11,13 +11,18 @@ namespace Company.G02.PL.Controllers
 {
     public class DepartmentController : Controller
     {
-        private readonly IDepartmentRepository _departmentRepository;
+        private readonly IUnitOfWork _unitOfWork;
+
+        // private readonly IDepartmentRepository _departmentRepository;
         private readonly IMapper _mapper;
 
-        public DepartmentController(IDepartmentRepository departmentRepository
-            , IMapper mapper)
+        public DepartmentController(//IDepartmentRepository departmentRepository
+                                       IUnitOfWork unitOfWork
+                                     , IMapper mapper
+                                    )
         {
-            _departmentRepository = departmentRepository;
+            _unitOfWork = unitOfWork;
+            //  _departmentRepository = departmentRepository;
             _mapper = mapper;
         }
 
@@ -35,8 +40,8 @@ namespace Company.G02.PL.Controllers
         /// /////////////////////////////////////////////////////////
         public IActionResult Index(string SearchInput)
         {
-            var departments = _departmentRepository.GetALL();
-
+            // var departments = _departmentRepository.GetALL();
+            var departments = _unitOfWork.DepartmentRepository.GetALL();
             //if (!string.IsNullOrEmpty(SearchInput))
             //{
             //    departments = departments.Where(d => d.Name.Contains(SearchInput)).ToList();
@@ -46,12 +51,14 @@ namespace Company.G02.PL.Controllers
 
             if (string.IsNullOrEmpty(SearchInput))
             {
-                departments = _departmentRepository.GetALL();
+                //  departments = _departmentRepository.GetALL();
+                departments = _unitOfWork.DepartmentRepository.GetALL();
 
             }
             else
             {
-                departments = _departmentRepository.GetByName(SearchInput);
+                //  departments = _departmentRepository.GetByName(SearchInput);
+                departments = _unitOfWork.DepartmentRepository.GetByName(SearchInput);
 
             }
 
@@ -84,8 +91,9 @@ namespace Company.G02.PL.Controllers
 
 
                 var department = _mapper.Map<CreateDepartmentDto, Department>(model);
-                var count = _departmentRepository.Add(department);
-
+                //var count = _departmentRepository.Add(department);
+               _unitOfWork.DepartmentRepository.Add(department);
+                var count = _unitOfWork.complete();
                 if (count > 0) { return RedirectToAction(nameof(Index)); }
 
 
@@ -104,7 +112,8 @@ namespace Company.G02.PL.Controllers
             {
                 return BadRequest("IS INVALID MESSAGE");//400
             }
-            var department = _departmentRepository.Get(id.Value);
+            //var department = _departmentRepository.Get(id.Value);
+            var department = _unitOfWork.DepartmentRepository.Get(id.Value);
             if (department == null)
             {
                 return NotFound(new { StatusCode = 404, Message = $"Department with {id} is not valid" });
@@ -118,7 +127,9 @@ namespace Company.G02.PL.Controllers
         {
             if (id is null) return BadRequest("IS INVALID MESSAGE");//400
 
-            var department = _departmentRepository.Get(id.Value);
+            //  var department = _departmentRepository.Get(id.Value);
+
+            var department = _unitOfWork.DepartmentRepository.Get(id.Value);
             if (department == null) return NotFound(new { StatusCode = 404, Message = $"Department with {id} is not valid" });
 
             //var DepartmentDto = new CreateDepartmentDto()
@@ -160,7 +171,9 @@ namespace Company.G02.PL.Controllers
                 var department = _mapper.Map<CreateDepartmentDto, Department>(model);
 
                 {
-                    var count = _departmentRepository.Update(department);
+                    // var count = _departmentRepository.Update(department);
+                   _unitOfWork.DepartmentRepository.Update(department);
+                    var count = _unitOfWork.complete();
                     if (count > 0)
                     {
                         return RedirectToAction(nameof(Index));
@@ -227,7 +240,8 @@ namespace Company.G02.PL.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete([FromRoute] int id)
         {
-            var department = _departmentRepository.Get(id);
+            // var department = _departmentRepository.Get(id);
+            var department = _unitOfWork.DepartmentRepository.Get(id);
             if (department == null)
             {
                 return NotFound("Department Not Found");
@@ -236,7 +250,9 @@ namespace Company.G02.PL.Controllers
             {
                 if (id == department.Id)
                 {
-                    var count = _departmentRepository.Delete(department);
+                    //  var count = _departmentRepository.Delete(department);
+                   _unitOfWork.DepartmentRepository.Delete(department);
+                    var count = _unitOfWork.complete();
                     if (count > 0)
                     {
                         return RedirectToAction(nameof(Index));

@@ -1,3 +1,4 @@
+using Company.G02.BLL;
 using Company.G02.BLL.Interfaces;
 using Company.G02.BLL.Repository;
 using Company.G02.DAL.Data.Contexts;
@@ -16,9 +17,9 @@ namespace Company.G02.PL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>(); //Allow DI for DepartmentRepository
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>(); //Allow DI for EmployeeRepository
-
+            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>(); //Allow DI for DepartmentRepository
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>(); //Allow DI for EmployeeRepository
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); //Allow DI for UnitOfWork    
 
             builder.Services.AddDbContext<CompanyDbContext>(options =>
             {
@@ -36,7 +37,7 @@ namespace Company.G02.PL
             builder.Services.AddScoped<IScopedService, ScopedService>();//Per Request
             builder.Services.AddTransient<ITransientService, TransientService>(); // pre operation
             builder.Services.AddSingleton<ISingletonService, SingletonService>(); // per application
-
+         
 
             var app = builder.Build();
 
