@@ -1,6 +1,7 @@
 ﻿using Company.G02.BLL.Interfaces;
 using Company.G02.DAL.Data.Contexts;
 using Company.G02.DAL.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,12 +59,28 @@ namespace Company.G02.BLL.Repository
 
 
 
-        // Ask CLR Create Object From CompanyDbContext
-        public DepartmentRepository(CompanyDbContext Context) : base(Context)
+        private CompanyDbContext _Context { get; }
+        public DepartmentRepository(CompanyDbContext context) : base(context)//ASK CLR Create Object From CompanyDbContext    
         {
-
+            _Context = context;
         }
 
-       
+
+
+
+        public List<Department> GetByName(string name)
+        {
+            return _Context.Departments.Where(E => E.Name
+                                       .ToLower()
+                                       .Contains(name.ToLower()))
+                                       .ToList();
+        }
+
+
+
+
+
+
+
     }
 }

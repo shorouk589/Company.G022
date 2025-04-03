@@ -37,9 +37,22 @@ namespace Company.G02.PL.Controllers
         {
             var departments = _departmentRepository.GetALL();
 
-            if (!string.IsNullOrEmpty(SearchInput))
+            //if (!string.IsNullOrEmpty(SearchInput))
+            //{
+            //    departments = departments.Where(d => d.Name.Contains(SearchInput)).ToList();
+            //}
+
+
+
+            if (string.IsNullOrEmpty(SearchInput))
             {
-                departments = departments.Where(d => d.Name.Contains(SearchInput)).ToList();
+                departments = _departmentRepository.GetALL();
+
+            }
+            else
+            {
+                departments = _departmentRepository.GetByName(SearchInput);
+
             }
 
             return View(departments);

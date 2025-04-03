@@ -21,7 +21,7 @@ namespace Company.G02.BLL.Interfaces
 
 
         //int Delete(Department model);
-
+        List<Department> GetByName(string name);
 
     }
 }
