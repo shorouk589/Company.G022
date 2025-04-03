@@ -8,6 +8,8 @@ InputSearch.addEventListener("keyup", () => {
     let xhr = new XMLHttpRequest();
 
     let url = `https://localhost:44381/Employee?SearchInput=${InputSearch.value}`;
+
+    let url = `https://localhost:44381/Department?SearchInput=${InputSearch.value}`;
     xhr.open('GET', url, true);
     xhr.onreadystatechange = function () {
         if (this.readyState = 4 && this.status == 200) {
