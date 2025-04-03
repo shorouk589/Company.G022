@@ -1,6 +1,8 @@
 using Company.G02.BLL.Interfaces;
 using Company.G02.BLL.Repository;
 using Company.G02.DAL.Data.Contexts;
+using Company.G02.PL.Mapping;
+using Company.G02.PL.Services;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
@@ -16,11 +18,28 @@ namespace Company.G02.PL
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>(); //Allow DI for DepartmentRepository
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>(); //Allow DI for EmployeeRepository
+
+
             builder.Services.AddDbContext<CompanyDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            });//Allow DI for CompanyDbContext
+            } /*,  ServiceLifetime.Singleton*/);//Allow DI for CompanyDbContext
+            builder.Services.AddAutoMapper(M => M.AddProfile(new EmployeeProfile()));//Per Request
+            builder.Services.AddAutoMapper(D => D.AddProfile(new DepartmentProfile()));
+
+
+            // Life Time
+            // builder.Services.AddScoped();    //Create one instance per request / per request(all life time object will be same for one request) /(after that it will be Unreachable)
+            // builder.Services.AddTransient(); //Create a new instance every time/per one operation (all life time object will be different)
+            // builder.Services.AddSingleton(); //Create one instance per application /per App (all life time object will be same for all request)
+
+            builder.Services.AddScoped<IScopedService, ScopedService>();//Per Request
+            builder.Services.AddTransient<ITransientService, TransientService>(); // pre operation
+            builder.Services.AddSingleton<ISingletonService, SingletonService>(); // per application
+
+
             var app = builder.Build();
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

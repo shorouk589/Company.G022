@@ -5,8 +5,10 @@ namespace Company.G02.PL.DTO
 {
     public class CreateEmployeeDto
     {
+        public int Id { get; set; } 
+
         [Required(ErrorMessage = "Name is Required !!")]
-        public string Name { get; set; }
+        public string EmpName { get; set; }
 
         [Range(22, 60, ErrorMessage = "Age Must Be Between 22 and 60")]
         public int? Age { get; set; }
