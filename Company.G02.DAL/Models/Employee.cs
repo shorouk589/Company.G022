@@ -21,10 +21,15 @@ namespace Company.G02.DAL.Models
         public bool IsDeleted { get; set; }
         [DisplayName("Hiring Date")]
         public DateTime DateOfBirth { get; set; }
-        public DateTime CreateAt { get; set; }
+        public DateTime CreateAt { get; set; } = DateTime.UtcNow;
         [DisplayName("Department")]
         public int? DepartmentId { get; set; }
 
         public Department Department { get; set; }
+
+        public string? ImageName { get; set; }
+
+
+        
     }
 }

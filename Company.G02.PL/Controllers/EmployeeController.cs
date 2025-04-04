@@ -83,7 +83,7 @@ namespace Company.G02.PL.Controllers
                 var employee = _mapper.Map<CreateEmployeeDto, Employee>(model);
                 //   var count = _EmployeeRepository.Add(employee);
                 //   var count = _unitOfWork.EmployeeRepository.Add(employee);
-                var count =_unitOfWork.complete();
+                var count = _unitOfWork.complete();
 
                 if (count > 0)
                 {
@@ -217,7 +217,7 @@ namespace Company.G02.PL.Controllers
                                                                  // var count = _EmployeeRepository.Delete(model);
                                                                  //   var count = _unitOfWork.EmployeeRepository.Delete(model);
             _unitOfWork.EmployeeRepository.Delete(model);
-            var count
+            var count = _unitOfWork.complete();
             if (count > 0) { return RedirectToAction(nameof(Index)); }
             return View(model);
         }
