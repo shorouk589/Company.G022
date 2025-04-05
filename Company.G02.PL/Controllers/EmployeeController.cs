@@ -55,7 +55,8 @@ namespace Company.G02.PL.Controllers
         public IActionResult Create()
         {
             //  var department = _departmentRepository.GetALL();
-            var department = _unitOfWork.DepartmentRepository.GetALL();
+            var department = _unitOfWork.DepartmentRepository.GetALL().ToList();
+
             ViewData["departments"] = department;
             return View();
         }
@@ -82,8 +83,8 @@ namespace Company.G02.PL.Controllers
                 //};
                 var employee = _mapper.Map<CreateEmployeeDto, Employee>(model);
                 //   var count = _EmployeeRepository.Add(employee);
-               _unitOfWork.EmployeeRepository.Add(employee);
-                var count =_unitOfWork.complete();
+                _unitOfWork.EmployeeRepository.Add(employee);
+                var count = _unitOfWork.complete();
 
                 if (count > 0)
                 {
@@ -91,6 +92,9 @@ namespace Company.G02.PL.Controllers
                 }
 
             }
+            var departments = _unitOfWork.DepartmentRepository.GetALL();
+            ViewData["departments"] = departments;
+
             return View(model);
         }
 
