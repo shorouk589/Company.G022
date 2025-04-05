@@ -8,8 +8,9 @@
 
 
 <h1>Delete Employee</h1>
-
-
+@*
+<input type="hidden" asp-for="Id" />*@
+<input type="hidden" asp-for="ImageName" />
 <form asp-action="Delete">
     <partial name="EmployeePartialView/_DeleteDetailsPartialView" model="@Model" />
     <div class="my-3">

@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Company.G02.DAL.Data.Migrations
+namespace Company.G02.DAL.Migrations
 {
     [DbContext(typeof(CompanyDbContext))]
-    [Migration("20250326060517_AddEmployeeDepartmentRelation")]
-    partial class AddEmployeeDepartmentRelation
+    [Migration("20250405124138_AddImageNameColumn")]
+    partial class AddImageNameColumn
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,6 +74,9 @@ namespace Company.G02.DAL.Data.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
