@@ -4,6 +4,7 @@ using Company.G02.BLL.Interfaces;
 using Company.G02.BLL.Repository;
 using Company.G02.DAL.Models;
 using Company.G02.PL.DTO;
+using Company.G02.PL.Helper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Company.G02.PL.Controllers
@@ -81,6 +82,14 @@ namespace Company.G02.PL.Controllers
                 //    DepartmentId = model.DepartmentId,
 
                 //};
+
+                if (model.Image != null)
+                {
+
+                    model.ImageName = DocumentSetting.UploadFile(model.Image, "images");
+                }
+
+
                 var employee = _mapper.Map<CreateEmployeeDto, Employee>(model);
                 //   var count = _EmployeeRepository.Add(employee);
                 _unitOfWork.EmployeeRepository.Add(employee);
@@ -160,44 +169,101 @@ namespace Company.G02.PL.Controllers
             //return View(employee);
         }
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Edit([FromRoute] int id, CreateEmployeeDto model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        // if (id != model.Id) return BadRequest("Invalid Id"); //400
+        //        //var employee = new Employee()
+        //        //{
+        //        //    Id = id,
+        //        //    Name = model.Name,
+        //        //    Age = model.Age,
+        //        //    Email = model.Email,
+        //        //    Phone = model.Phone,
+        //        //    Address = model.Address,
+        //        //    Salary = model.Salary,
+        //        //    IsActive = model.IsActive,
+        //        //    IsDeleted = model.IsDeleted,
+        //        //    DateOfBirth = model.HiringDate,
+        //        //    CreateAt = model.CreateAt,
+        //        //    DepartmentId = model.DepartmentId,
+        //        //};
+
+        //        if (model.ImageName != null && model.Image != null)
+        //        {
+
+        //            DocumentSetting.DeleteFile(model.ImageName, "images");
+        //        }
+        //        if (model.Image != null)
+        //        {
+        //            model.ImageName = DocumentSetting.UploadFile(model.Image, "images");
+        //        }
+
+
+        //        DocumentSetting.UploadFile(model.Image, "images");
+
+
+        //        var employee = _mapper.Map<CreateEmployeeDto, Employee>(model);
+
+        //        _unitOfWork.EmployeeRepository.Update(employee);
+        //        var count = _unitOfWork.complete();
+        //        if (count > 0) return RedirectToAction(nameof(Index));
+
+
+        //    }
+        //    //  var departments = _departmentRepository.GetALL();
+        //    var departments = _unitOfWork.DepartmentRepository.GetALL();
+        //    ViewData["departments"] = departments;
+
+        //    return View(model);
+        //}
+
+
+
+
+
+
+
+
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit([FromRoute] int id, CreateEmployeeDto model)
         {
             if (ModelState.IsValid)
             {
-                // if (id != model.Id) return BadRequest("Invalid Id"); //400
-                //var employee = new Employee()
-                //{
-                //    Id = id,
-                //    Name = model.Name,
-                //    Age = model.Age,
-                //    Email = model.Email,
-                //    Phone = model.Phone,
-                //    Address = model.Address,
-                //    Salary = model.Salary,
-                //    IsActive = model.IsActive,
-                //    IsDeleted = model.IsDeleted,
-                //    DateOfBirth = model.HiringDate,
-                //    CreateAt = model.CreateAt,
-                //    DepartmentId = model.DepartmentId,
-                //};
+                if (model.Image != null)
+                {
+                    // لو في صورة قديمة، امسحيها
+                    if (!string.IsNullOrEmpty(model.ImageName))
+                    {
+                        DocumentSetting.DeleteFile(model.ImageName, "images");
+                    }
+
+                    // حمّلي الصورة الجديدة
+                    model.ImageName = DocumentSetting.UploadFile(model.Image, "images");
+                }
 
                 var employee = _mapper.Map<CreateEmployeeDto, Employee>(model);
 
-
                 _unitOfWork.EmployeeRepository.Update(employee);
                 var count = _unitOfWork.complete();
-                if (count > 0) return RedirectToAction(nameof(Index));
-
-
+                if (count > 0)
+                    return RedirectToAction(nameof(Index));
             }
-            //  var departments = _departmentRepository.GetALL();
+
             var departments = _unitOfWork.DepartmentRepository.GetALL();
             ViewData["departments"] = departments;
-
             return View(model);
         }
+
+
+
 
         [HttpGet]
         public IActionResult Delete(int? id)
@@ -222,7 +288,12 @@ namespace Company.G02.PL.Controllers
                                                                  //   var count = _unitOfWork.EmployeeRepository.Delete(model);
             _unitOfWork.EmployeeRepository.Delete(model);
             var count = _unitOfWork.complete();
-            if (count > 0) { return RedirectToAction(nameof(Index)); }
+            if (count > 0) {
+                if (model.ImageName is not null)
+                {
+                    DocumentSetting.DeleteFile(model.ImageName, "images");
+                }
+                return RedirectToAction(nameof(Index)); }
             return View(model);
         }
 

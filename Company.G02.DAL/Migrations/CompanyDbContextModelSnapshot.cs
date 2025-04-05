@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Company.G02.DAL.Data.Migrations
+namespace Company.G02.DAL.Migrations
 {
     [DbContext(typeof(CompanyDbContext))]
     partial class CompanyDbContextModelSnapshot : ModelSnapshot
@@ -71,6 +71,9 @@ namespace Company.G02.DAL.Data.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")

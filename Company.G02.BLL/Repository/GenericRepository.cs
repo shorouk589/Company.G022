@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Company.G02.BLL.Repository
 {
-    public class GenericRepository<T> :IGenericRepository<T> where T : BaseEntity
+    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         private CompanyDbContext Context { get; }
 
@@ -20,7 +20,7 @@ namespace Company.G02.BLL.Repository
         }
         public IEnumerable<T> GetALL()
         {
-            if (typeof(T) == typeof(Employee)) {return (IEnumerable<T>)Context.Employees.Include(e=>e.Department).ToList(); }
+            if (typeof(T) == typeof(Employee)) { return (IEnumerable<T>)Context.Employees.Include(e => e.Department).ToList(); }
 
             return Context.Set<T>().ToList();
         }
@@ -37,13 +37,13 @@ namespace Company.G02.BLL.Repository
         public void Delete(T model)
         {
             Context.Set<T>().Remove(model);
-           
+
         }
 
         public void Update(T model)
         {
             Context.Set<T>().Update(model);
-           
+
         }
     }
 }
