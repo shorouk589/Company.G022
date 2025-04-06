@@ -18,19 +18,26 @@ namespace Company.G02.BLL.Repository
         {
             Context = context;
         }
-        public IEnumerable<T> GetALL()
+        public async Task<IEnumerable<T>> GetALLAsync()
         {
-            if (typeof(T) == typeof(Employee)) { return (IEnumerable<T>)Context.Employees.Include(e => e.Department).ToList(); }
+            if (typeof(T) == typeof(Employee))
+            {
+                return (IEnumerable<T>)await Context.Employees.Include(e => e.Department).ToListAsync();
+            }
 
-            return Context.Set<T>().ToList();
+            return await Context.Set<T>().ToListAsync();
         }
-        public T? Get(int id)
+        public async Task<T?> GetAsync(int id)
         {
+            if (typeof(T) == typeof(Employee))
+            {
+                return await Context.Employees.Include(e => e.Department).FirstOrDefaultAsync(e => e.Id == id) as T;
+            }
             return Context.Set<T>().Find(id);
         }
-        public void Add(T model)
+        public async Task AddAsync(T model)
         {
-            Context.Set<T>().Add(model);
+            await Context.Set<T>().AddAsync(model);
             //return Context.SaveChanges();
         }
 

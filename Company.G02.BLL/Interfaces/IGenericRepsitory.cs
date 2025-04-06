@@ -9,12 +9,12 @@ namespace Company.G02.BLL.Interfaces
 {
     public interface IGenericRepository<T> where T : BaseEntity
     {
-        public IEnumerable<T> GetALL();
+        Task<IEnumerable<T>> GetALLAsync();
 
-        T? Get(int id);
+        Task<T?> GetAsync(int id);
 
         //int Add(T model);
-        void Add(T model);
+        Task AddAsync(T model);
 
         //int Update(T model);
         void Update(T model);
