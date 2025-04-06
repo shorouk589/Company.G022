@@ -33,19 +33,19 @@ namespace Company.G02.PL.Controllers
 
 
         [HttpGet]
-        public IActionResult Index(string? SearchInput)
+        public async Task<IActionResult> Index(string? SearchInput)
         {
             IEnumerable<Employee> employees;
             if (string.IsNullOrEmpty(SearchInput))
             {
                 //employees = _EmployeeRepository.GetALL();
-                employees = _unitOfWork.EmployeeRepository.GetALL();
+                employees = await _unitOfWork.EmployeeRepository.GetALLAsync();
 
             }
             else
             {
-                //  employees = _EmployeeRepository.GetByName(SearchInput);
-                employees = _unitOfWork.EmployeeRepository.GetByName(SearchInput);
+                //  employees = _EmployeeRepository.GetByNameAsync(SearchInput);
+                employees = await _unitOfWork.EmployeeRepository.GetByNameAsync(SearchInput);
 
             }
             //var employees = _EmployeeRepository.GetALL();
@@ -53,16 +53,16 @@ namespace Company.G02.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             //  var department = _departmentRepository.GetALL();
-            var department = _unitOfWork.DepartmentRepository.GetALL().ToList();
+            var department = await _unitOfWork.DepartmentRepository.GetALLAsync();
 
             ViewData["departments"] = department;
             return View();
         }
         [HttpPost]
-        public IActionResult Create(CreateEmployeeDto model)
+        public async Task<IActionResult> Create(CreateEmployeeDto model)
         {
             if (ModelState.IsValid) //Server Side Validation
             {// Manual Mapping
@@ -92,8 +92,8 @@ namespace Company.G02.PL.Controllers
 
                 var employee = _mapper.Map<CreateEmployeeDto, Employee>(model);
                 //   var count = _EmployeeRepository.Add(employee);
-                _unitOfWork.EmployeeRepository.Add(employee);
-                var count = _unitOfWork.complete();
+                await _unitOfWork.EmployeeRepository.AddAsync(employee);
+                var count = await _unitOfWork.completeAsync();
 
                 if (count > 0)
                 {
@@ -101,37 +101,37 @@ namespace Company.G02.PL.Controllers
                 }
 
             }
-            var departments = _unitOfWork.DepartmentRepository.GetALL();
+            var departments = await _unitOfWork.DepartmentRepository.GetALLAsync();
             ViewData["departments"] = departments;
 
             return View(model);
         }
 
         [HttpGet]
-        public IActionResult Details(int? id, string ViewName = "Details")
+        public async Task<IActionResult> Details(int? id, string ViewName = "Details")
         {
             if (id == null) return BadRequest("Invalid Id");//100
                                                             // var departments = _departmentRepository.GetALL();
-            var departments = _unitOfWork.DepartmentRepository.GetALL();
+            var departments = await _unitOfWork.DepartmentRepository.GetALLAsync();
             ViewData["departments"] = departments;
 
             // var employee = _EmployeeRepository.Get(id.Value);
-            var employee = _unitOfWork.EmployeeRepository.Get(id.Value);
+            var employee = await _unitOfWork.EmployeeRepository.GetAsync(id.Value);
             if (employee == null) return NotFound("Employee Not Found");//404
             return View(ViewName, employee);
         }
 
 
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             // var department = _departmentRepository.GetALL();
-            var department = _unitOfWork.DepartmentRepository.GetALL();
+            var department = await _unitOfWork.DepartmentRepository.GetALLAsync();
             ViewData["departments"] = department;
             if (id is null) return BadRequest("IS INVALID MESSAGE");//400
 
             //  var employee = _EmployeeRepository.Get(id.Value);
-            var employee = _unitOfWork.EmployeeRepository.Get(id.Value);
+            var employee = await _unitOfWork.EmployeeRepository.GetAsync(id.Value);
 
             if (employee == null) return NotFound(new { StatusCode = 404, Message = $"Department with {id} is not valid" });
 
@@ -169,57 +169,6 @@ namespace Company.G02.PL.Controllers
             //return View(employee);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Edit([FromRoute] int id, CreateEmployeeDto model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        // if (id != model.Id) return BadRequest("Invalid Id"); //400
-        //        //var employee = new Employee()
-        //        //{
-        //        //    Id = id,
-        //        //    Name = model.Name,
-        //        //    Age = model.Age,
-        //        //    Email = model.Email,
-        //        //    Phone = model.Phone,
-        //        //    Address = model.Address,
-        //        //    Salary = model.Salary,
-        //        //    IsActive = model.IsActive,
-        //        //    IsDeleted = model.IsDeleted,
-        //        //    DateOfBirth = model.HiringDate,
-        //        //    CreateAt = model.CreateAt,
-        //        //    DepartmentId = model.DepartmentId,
-        //        //};
-
-        //        if (model.ImageName != null && model.Image != null)
-        //        {
-
-        //            DocumentSetting.DeleteFile(model.ImageName, "images");
-        //        }
-        //        if (model.Image != null)
-        //        {
-        //            model.ImageName = DocumentSetting.UploadFile(model.Image, "images");
-        //        }
-
-
-        //        DocumentSetting.UploadFile(model.Image, "images");
-
-
-        //        var employee = _mapper.Map<CreateEmployeeDto, Employee>(model);
-
-        //        _unitOfWork.EmployeeRepository.Update(employee);
-        //        var count = _unitOfWork.complete();
-        //        if (count > 0) return RedirectToAction(nameof(Index));
-
-
-        //    }
-        //    //  var departments = _departmentRepository.GetALL();
-        //    var departments = _unitOfWork.DepartmentRepository.GetALL();
-        //    ViewData["departments"] = departments;
-
-        //    return View(model);
-        //}
 
 
 
@@ -233,7 +182,7 @@ namespace Company.G02.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, CreateEmployeeDto model)
+        public async Task<IActionResult> Edit([FromRoute] int id, CreateEmployeeDto model)
         {
             if (ModelState.IsValid)
             {
@@ -252,12 +201,12 @@ namespace Company.G02.PL.Controllers
                 var employee = _mapper.Map<CreateEmployeeDto, Employee>(model);
 
                 _unitOfWork.EmployeeRepository.Update(employee);
-                var count = _unitOfWork.complete();
+                var count = await _unitOfWork.completeAsync();
                 if (count > 0)
                     return RedirectToAction(nameof(Index));
             }
 
-            var departments = _unitOfWork.DepartmentRepository.GetALL();
+            var departments = await _unitOfWork.DepartmentRepository.GetALLAsync();
             ViewData["departments"] = departments;
             return View(model);
         }
@@ -266,34 +215,36 @@ namespace Company.G02.PL.Controllers
 
 
         [HttpGet]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             // var departments = _departmentRepository.GetALL();
-            var departments = _unitOfWork.DepartmentRepository.GetALL();
+            var departments = await _unitOfWork.DepartmentRepository.GetALLAsync();
             ViewData["departments"] = departments;
 
-            return Details(id, "Delete");
+            return await Details(id, "Delete");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete([FromRoute] int id, Employee model)
+        public async Task<IActionResult> Delete([FromRoute] int id, Employee model)
         {
             // var departments = _departmentRepository.GetALL();
-            var departments = _unitOfWork.DepartmentRepository.GetALL();
+            var departments = await _unitOfWork.DepartmentRepository.GetALLAsync();
             ViewData["departments"] = departments;
 
             if (id != model.Id) return BadRequest("Invalid Id"); //400    
                                                                  // var count = _EmployeeRepository.Delete(model);
                                                                  //   var count = _unitOfWork.EmployeeRepository.Delete(model);
             _unitOfWork.EmployeeRepository.Delete(model);
-            var count = _unitOfWork.complete();
-            if (count > 0) {
+            var count = await _unitOfWork.completeAsync();
+            if (count > 0)
+            {
                 if (model.ImageName is not null)
                 {
                     DocumentSetting.DeleteFile(model.ImageName, "images");
                 }
-                return RedirectToAction(nameof(Index)); }
+                return RedirectToAction(nameof(Index));
+            }
             return View(model);
         }
 

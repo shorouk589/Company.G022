@@ -57,7 +57,7 @@ namespace Company.G02.PL.Controllers
             }
             else
             {
-                //  departments = _departmentRepository.GetByName(SearchInput);
+                //  departments = _departmentRepository.GetByNameAsync(SearchInput);
                 departments = _unitOfWork.DepartmentRepository.GetByName(SearchInput);
 
             }

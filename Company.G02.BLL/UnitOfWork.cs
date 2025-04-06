@@ -16,7 +16,7 @@ namespace Company.G02.BLL
         public IEmployeeRepository EmployeeRepository { get; }//NULL
         private readonly CompanyDbContext _context;
 
-        public UnitOfWork(CompanyDbContext context )
+        public UnitOfWork(CompanyDbContext context)
         {
             _context = context;
             DepartmentRepository = new DepartmentRepository(_context);
@@ -24,14 +24,15 @@ namespace Company.G02.BLL
 
         }
 
-        public int complete()
+        public async Task<int> completeAsync()
         {
-            return _context.SaveChanges();
+            return await _context.SaveChangesAsync();
         }
 
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
-           _context.Dispose();
+            await _context.DisposeAsync();
+
         }
     }
 }
