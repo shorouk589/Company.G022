@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Company.G02.DAL.Migrations
 {
     [DbContext(typeof(CompanyDbContext))]
-    [Migration("20250405124138_AddImageNameColumn")]
-    partial class AddImageNameColumn
+    [Migration("20250407161820_INitial")]
+    partial class INitial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
